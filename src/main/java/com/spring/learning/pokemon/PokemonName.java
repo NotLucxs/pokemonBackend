@@ -1,13 +1,19 @@
 package com.spring.learning.pokemon;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.io.Serializable;
 
 @SuperBuilder
 @Data
-public class PokemonName {
-    private String english;
-    private String japanese;
-    private String chinese;
-    private String french;
+@AllArgsConstructor
+@NoArgsConstructor
+public class PokemonName implements Serializable {
+    public String english;
+    public String japanese;
+    public String chinese;
+    public String french;
 }

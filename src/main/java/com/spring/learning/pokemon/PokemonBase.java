@@ -1,13 +1,18 @@
 package com.spring.learning.pokemon;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.io.Serializable;
 
 @SuperBuilder
 @Data
-public class PokemonBase {
+@AllArgsConstructor
+@NoArgsConstructor
+public class PokemonBase implements Serializable {
     @SerializedName("HP")
     private int hp;
     @SerializedName("Attack")
