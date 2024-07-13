@@ -63,4 +63,21 @@ public class PokemonTest {
         Assertions.assertEquals("Grass", returnedPokemon.getType().get(0));
         Assertions.assertEquals("Poison", returnedPokemon.getType().get(1));
     }
+
+    @Test
+    void testGetPokemonByName() throws Exception {
+        given(pokemonService.getPokemonByName(ArgumentMatchers.anyString())).willReturn(pokemon);
+        MvcResult response = mockMvc.perform(get("/pokemon?name=Bulbasaur").contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+
+        String content = response.getResponse().getContentAsString();
+        Pokemon returnedPokemon = gson.fromJson(content, Pokemon.class);
+
+        Assertions.assertEquals(1, returnedPokemon.getId());
+        Assertions.assertEquals("Bulbasaur", returnedPokemon.getName());
+        Assertions.assertEquals("Grass", returnedPokemon.getType().get(0));
+        Assertions.assertEquals("Poison", returnedPokemon.getType().get(1));
+    }
 }
