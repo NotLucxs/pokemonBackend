@@ -1,8 +1,5 @@
 package com.spring.learning.storage;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-import com.spring.learning.pokemon.Pokemon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -16,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 @Service
@@ -24,7 +20,6 @@ public class LocalStorageSystem implements IStorageService{
 
     private static final Logger log = LoggerFactory.getLogger(LocalStorageSystem.class);
     private final Path dir = Paths.get("pokemon");
-    private final Gson gson = new Gson();
 
     @Override
     public String store(MultipartFile file) {
@@ -34,7 +29,7 @@ public class LocalStorageSystem implements IStorageService{
         var destinationFile = this.dir.resolve(
                 Paths.get(file.getOriginalFilename()))
                 .normalize().toAbsolutePath();
-        System.out.println("Saving to: "+destinationFile.toString());
+        System.out.println("Saving to: "+destinationFile);
         if(!destinationFile.getParent().equals(this.dir.toAbsolutePath())) {
             throw new StorageException("Cannot store file outside current directory!");
         }
@@ -64,18 +59,6 @@ public class LocalStorageSystem implements IStorageService{
             }
         } catch(MalformedURLException e){
             throw new StorageException("Unable to load image :(", e);
-        }
-    }
-
-    public Pokemon getPokemonDataById(String id) throws StorageException{
-        try {
-            var reader = new JsonReader(new FileReader(dir + "/pokedex.json"));
-            Pokemon[] pokemons = gson.fromJson(reader, Pokemon[].class);
-            return Arrays.stream(pokemons).filter(pokemon -> String.valueOf(pokemon.getId()).equals(id)).findFirst().get();
-        } catch(FileNotFoundException e) {
-            throw new StorageException("Unable to find pokedex.json!");
-        } catch(Exception e) {
-            throw new StorageException("Unable to find pokemon "+id);
         }
     }
 
